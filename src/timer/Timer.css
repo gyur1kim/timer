@@ -1,0 +1,19 @@
+.timer-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  font-size: 48px;
+  font-family: Pretendard-Regular;
+  color: #3e3e3e;
+}
+
+.time {
+  min-width: 65px;
+  font-weight: 500;
+}
+
+.second {
+  min-width: 65px;
+  font-weight: 700;
+}
