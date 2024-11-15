@@ -3,9 +3,10 @@
   justify-content: center;
   align-items: center;
 
+  margin-top: 20px;
+  margin-bottom: 50px;
+
   font-size: 48px;
-  font-family: Pretendard-Regular;
-  color: #3e3e3e;
 }
 
 .time {
@@ -16,4 +17,27 @@
 .second {
   min-width: 65px;
   font-weight: 700;
+}
+
+.button-wrapper > button {
+  width: 180px;
+  height: 40px;
+
+  border-radius: 30px;
+  border: none;
+
+  font-family: Pretendard-Regular;
+  font-size: 16px;
+
+  cursor: pointer;
+}
+
+.button-wrapper > .button_stop {
+  background-color: #ffa29c;
+  color: #a3190f;
+}
+
+.button-wrapper > .button_go {
+  background-color: #9dbaff;
+  color: #083fc4;
 }
