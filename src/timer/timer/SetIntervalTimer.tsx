@@ -4,6 +4,7 @@ import TimerDisplay from "timer/TimerDisplay";
 import TimerDelay from "timer/TimerDelay";
 
 import timerFormat from "utils/timerFormat";
+import { SECOND } from "utils/const";
 
 import { TimerInterface } from "types/timer";
 
@@ -28,13 +29,13 @@ function SetInterval({ milliseconds }: TimerInterface) {
       listElem.appendChild(li);
       listElem.scrollTop = listElem.scrollHeight;
 
-      const elapsedTime = Math.max(1000, delay - (delay % 1000));
+      const elapsedTime = Math.max(SECOND, delay - (delay % SECOND));
       startTimestamp.current = now;
 
       setTime((prev) => prev - elapsedTime);
     };
 
-    const intervalId = setInterval(handleTimer, 1000);
+    const intervalId = setInterval(handleTimer, SECOND);
     setIntervalId(intervalId);
 
     return () => {

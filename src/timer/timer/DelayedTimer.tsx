@@ -5,6 +5,7 @@ import TimerDelay from "timer/TimerDelay";
 
 import timerFormat from "utils/timerFormat";
 import addDelayToList from "utils/addDelayToList";
+import { SECOND } from "utils/const";
 
 import { TimerInterface } from "types/timer";
 
@@ -26,10 +27,10 @@ function DelayedTimer({ milliseconds }: TimerInterface) {
       addDelayToList(delay);
 
       startTimestamp.current = now;
-      setTime((prev) => prev - 1000);
+      setTime((prev) => prev - SECOND);
     };
 
-    const intervalId = setInterval(handleTimer, 1000);
+    const intervalId = setInterval(handleTimer, SECOND);
     setIntervalId(intervalId);
 
     return () => {
