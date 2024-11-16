@@ -1,13 +1,14 @@
 import { useEffect, useRef, useState } from "react";
 
-import TimerDisplay from "../TimerDisplay";
-import TimerDelay from "../TimerDelay";
+import TimerDisplay from "timer/TimerDisplay";
+import TimerDelay from "timer/TimerDelay";
 
-import timerFormat from "../../utils/timerFormat";
+import timerFormat from "utils/timerFormat";
+import addDelayToList from "utils/addDelayToList";
 
-import { TimerInterface } from "../../types/timer";
+import { TimerInterface } from "types/timer";
 
-import "../Timer.css";
+import "css/Timer.css";
 
 function DelayedTimer({ milliseconds }: TimerInterface) {
   const [time, setTime] = useState<number>(milliseconds);
@@ -16,16 +17,13 @@ function DelayedTimer({ milliseconds }: TimerInterface) {
 
   const startTimestamp = useRef(Date.now());
 
-  const listElem = document.querySelector(".delay-list")!;
-
   // timer 로직
   useEffect(() => {
     const handleTimer = () => {
       const now = Date.now();
-      const li = document.createElement("li");
-      li.innerText = `[delay] ${now - startTimestamp.current}`;
-      listElem.appendChild(li);
-      listElem.scrollTop = listElem.scrollHeight;
+      const delay = now - startTimestamp.current;
+
+      addDelayToList(delay);
 
       startTimestamp.current = now;
       setTime((prev) => prev - 1000);
@@ -37,7 +35,7 @@ function DelayedTimer({ milliseconds }: TimerInterface) {
     return () => {
       if (intervalId) clearInterval(intervalId);
     };
-  }, [listElem]);
+  }, []);
 
   // timer 시간이 0이 되면 종료
   useEffect(() => {
