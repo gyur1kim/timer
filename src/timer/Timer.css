@@ -4,7 +4,7 @@
   align-items: center;
 
   margin-top: 20px;
-  margin-bottom: 50px;
+  margin-bottom: 40px;
 
   font-size: 48px;
 }
@@ -22,6 +22,7 @@
 .button-wrapper > button {
   width: 180px;
   height: 40px;
+  margin-bottom: 15px;
 
   border-radius: 30px;
   border: none;
@@ -32,23 +33,30 @@
   cursor: pointer;
 }
 
-.button-wrapper > .button_stop {
-  background-color: #ffa29c;
-  color: #a3190f;
-}
-
-.button-wrapper > .button_go {
-  background-color: #9dbaff;
-  color: #083fc4;
+.button-wrapper > .button_delay {
+  background-color: #fff695;
+  color: #908527;
 }
 
 .delay-wrapper {
   display: flex;
   justify-content: center;
-  max-height: 400px;
+  max-height: 300px;
 }
 
 .delay-list {
-  width: 400px;
+  width: 210px;
   overflow-y: auto;
+}
+
+.delay-list::-webkit-scrollbar {
+  width: 5px;
+}
+
+.delay-list::-webkit-scrollbar-thumb {
+  background: #b0b0b0;
+}
+
+.delay-list > li {
+  list-style-type: none;
 }
