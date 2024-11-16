@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import timerFormat from "../utils/timerFormat";
 
@@ -12,32 +12,35 @@ function WrongTimer({ milliseconds }: WrongTimerType) {
   const [time, setTime] = useState<number>(milliseconds);
   const [intervalId, setIntervalId] =
     useState<ReturnType<typeof setInterval>>();
-  const [run, setRun] = useState<boolean>(false);
+  const startTimestamp = useRef(Date.now());
+
+  const listElem = document.querySelector(".delay-list")!;
 
   useEffect(() => {
-    if (!run) return;
-
     const handleTimer = () => {
+      const now = Date.now();
+      const li = document.createElement("li");
+      li.innerText = `delay : ${now - startTimestamp.current}`;
+      listElem.appendChild(li);
+      listElem.scrollTop = listElem.scrollHeight;
+
+      startTimestamp.current = now;
       setTime((prev) => prev - 1000);
     };
 
-    const intervalId: ReturnType<typeof setInterval> = setInterval(
-      handleTimer,
-      1000
-    );
+    const intervalId = setInterval(handleTimer, 1000);
     setIntervalId(intervalId);
 
     return () => {
-      if (run && intervalId) clearInterval(intervalId);
+      if (intervalId) clearInterval(intervalId);
     };
-  }, [run]);
+  }, [listElem]);
 
   useEffect(() => {
-    if (time <= 0 && run && intervalId) {
+    if (time <= 0 && intervalId) {
       clearInterval(intervalId);
-      setRun(false);
     }
-  }, [time, intervalId, run]);
+  }, [time, intervalId]);
 
   const [min, sec] = timerFormat(time);
 
@@ -47,14 +50,8 @@ function WrongTimer({ milliseconds }: WrongTimerType) {
         <span className="time">{min}</span>:
         <span className="second">{sec}</span>
       </div>
-      <div className="button-wrapper">
-        <button
-          type="button"
-          className={`button_${run ? "stop" : "go"}`}
-          onClick={() => setRun((prev) => !prev)}
-        >
-          {run ? "일시정지" : "시작하기"}
-        </button>
+      <div className="delay-wrapper">
+        <ul className="delay-list"></ul>
       </div>
     </>
   );

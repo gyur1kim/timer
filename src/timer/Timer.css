@@ -41,3 +41,14 @@
   background-color: #9dbaff;
   color: #083fc4;
 }
+
+.delay-wrapper {
+  display: flex;
+  justify-content: center;
+  max-height: 400px;
+}
+
+.delay-list {
+  width: 400px;
+  overflow-y: auto;
+}
