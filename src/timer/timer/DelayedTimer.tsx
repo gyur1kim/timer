@@ -1,26 +1,29 @@
 import { useEffect, useRef, useState } from "react";
 
-import timerFormat from "../utils/timerFormat";
+import TimerDisplay from "../TimerDisplay";
+import TimerDelay from "../TimerDelay";
 
-import "./Timer.css";
+import timerFormat from "../../utils/timerFormat";
 
-interface WrongTimerType {
-  milliseconds: number;
-}
+import { TimerInterface } from "../../types/timer";
 
-function WrongTimer({ milliseconds }: WrongTimerType) {
+import "../Timer.css";
+
+function DelayedTimer({ milliseconds }: TimerInterface) {
   const [time, setTime] = useState<number>(milliseconds);
   const [intervalId, setIntervalId] =
     useState<ReturnType<typeof setInterval>>();
+
   const startTimestamp = useRef(Date.now());
 
   const listElem = document.querySelector(".delay-list")!;
 
+  // timer 로직
   useEffect(() => {
     const handleTimer = () => {
       const now = Date.now();
       const li = document.createElement("li");
-      li.innerText = `delay : ${now - startTimestamp.current}`;
+      li.innerText = `[delay] ${now - startTimestamp.current}`;
       listElem.appendChild(li);
       listElem.scrollTop = listElem.scrollHeight;
 
@@ -36,8 +39,11 @@ function WrongTimer({ milliseconds }: WrongTimerType) {
     };
   }, [listElem]);
 
+  // timer 시간이 0이 되면 종료
   useEffect(() => {
-    if (time <= 0 && intervalId) {
+    if (time > 0) return;
+
+    if (intervalId) {
       clearInterval(intervalId);
     }
   }, [time, intervalId]);
@@ -46,10 +52,8 @@ function WrongTimer({ milliseconds }: WrongTimerType) {
 
   return (
     <>
-      <div className="timer-wrapper">
-        <span className="time">{min}</span>:
-        <span className="second">{sec}</span>
-      </div>
+      <TimerDisplay min={min} sec={sec} />
+      <TimerDelay />
       <div className="delay-wrapper">
         <ul className="delay-list"></ul>
       </div>
@@ -57,4 +61,4 @@ function WrongTimer({ milliseconds }: WrongTimerType) {
   );
 }
 
-export default WrongTimer;
+export default DelayedTimer;
