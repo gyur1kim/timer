@@ -31,9 +31,14 @@ function SetTimeout({ milliseconds }: TimerInterface) {
       const delayedSec = Math.max(1, Math.floor(delay / MILLISECOND));
       setTime((prev) => prev - delayedSec * MILLISECOND);
 
-      const nextDelay = handleNextDelay(delay);
       startTimestamp.current = now;
-      timeoutIdRef.current = setTimeout(handleTimer, nextDelay);
+      // 이거 주석해제하면 delay 시차를 줄일 수는 있지만,,,
+      // 잘못하면 타이머가 980ms, 1200ms,,, 이렇게 진행될 수 있음
+      // const nextDelay = handleNextDelay(delay);
+      // timeoutIdRef.current = setTimeout(handleTimer, nextDelay);
+
+      // 이거 주석해제하면,, 무조건 1000 + n 초 뒤 실행하므로 타이머에 오차가 발생
+      timeoutIdRef.current = setTimeout(handleTimer, MILLISECOND);
     };
 
     timeoutIdRef.current = setTimeout(handleTimer, MILLISECOND);
