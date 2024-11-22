@@ -1,7 +1,7 @@
 .timer-wrapper {
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: baseline;
 
   margin-top: 20px;
   margin-bottom: 40px;
@@ -17,6 +17,13 @@
 .second {
   min-width: 65px;
   font-weight: 700;
+}
+
+.milli {
+  min-width: 77px;
+  font-size: 36px;
+  font-weight: 700;
+  text-align: left;
 }
 
 .button-wrapper > button {
