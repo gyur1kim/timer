@@ -5,7 +5,7 @@ import TimerDelay from "timer/TimerDelay";
 
 import timerFormat from "utils/timerFormat";
 import addDelayToList from "utils/addDelayToList";
-import { SECOND } from "utils/const";
+import { MILLISECOND } from "utils/const";
 
 import { TimerInterface } from "types/timer";
 
@@ -13,9 +13,7 @@ import "css/Timer.css";
 
 function DelayedTimer({ milliseconds }: TimerInterface) {
   const [time, setTime] = useState<number>(milliseconds);
-  const [intervalId, setIntervalId] =
-    useState<ReturnType<typeof setInterval>>();
-
+  const intervalId = useRef<ReturnType<typeof setInterval>>();
   const startTimestamp = useRef(Date.now());
 
   // timer 로직
@@ -27,25 +25,24 @@ function DelayedTimer({ milliseconds }: TimerInterface) {
       addDelayToList(delay);
 
       startTimestamp.current = now;
-      setTime((prev) => prev - SECOND);
+      setTime((prev) => prev - MILLISECOND);
     };
 
-    const intervalId = setInterval(handleTimer, SECOND);
-    setIntervalId(intervalId);
+    const id = setInterval(handleTimer, MILLISECOND);
+    intervalId.current = id;
 
     return () => {
-      if (intervalId) clearInterval(intervalId);
+      if (intervalId.current) clearInterval(intervalId.current);
     };
   }, []);
 
-  // timer 시간이 0이 되면 종료
   useEffect(() => {
     if (time > 0) return;
 
-    if (intervalId) {
-      clearInterval(intervalId);
+    if (intervalId.current) {
+      clearInterval(intervalId.current);
     }
-  }, [time, intervalId]);
+  }, [time]);
 
   const [min, sec] = timerFormat(time);
 

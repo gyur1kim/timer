@@ -3,8 +3,9 @@ import { useEffect, useRef, useState } from "react";
 import TimerDisplay from "timer/TimerDisplay";
 import TimerDelay from "timer/TimerDelay";
 
+import addDelayToList from "utils/addDelayToList";
+import { MILLISECOND } from "utils/const";
 import timerFormat from "utils/timerFormat";
-import { SECOND } from "utils/const";
 
 import { TimerInterface } from "types/timer";
 
@@ -12,42 +13,38 @@ import "css/Timer.css";
 
 function SetInterval({ milliseconds }: TimerInterface) {
   const [time, setTime] = useState<number>(milliseconds);
-  const [intervalId, setIntervalId] =
-    useState<ReturnType<typeof setInterval>>();
-
+  const intervalId = useRef<ReturnType<typeof setInterval>>();
   const startTimestamp = useRef(Date.now());
-
-  const listElem = document.querySelector(".delay-list")!;
 
   useEffect(() => {
     const handleTimer = () => {
       const now = Date.now();
       const delay = now - startTimestamp.current;
 
-      const li = document.createElement("li");
-      li.innerText = `[delay] ${delay}`;
-      listElem.appendChild(li);
-      listElem.scrollTop = listElem.scrollHeight;
+      addDelayToList(delay);
 
-      const elapsedTime = Math.max(SECOND, delay - (delay % SECOND));
+      const elapsedTime = Math.max(MILLISECOND, delay - (delay % MILLISECOND));
       startTimestamp.current = now;
 
       setTime((prev) => prev - elapsedTime);
     };
 
-    const intervalId = setInterval(handleTimer, SECOND);
-    setIntervalId(intervalId);
+    const id = setInterval(handleTimer, MILLISECOND);
+    intervalId.current = id;
 
     return () => {
-      if (intervalId) clearInterval(intervalId);
+      if (intervalId.current) clearInterval(intervalId.current);
     };
-  }, [listElem]);
+  }, []);
 
+  // timer 시간이 0이 되면 종료
   useEffect(() => {
-    if (time <= 0 && intervalId) {
-      clearInterval(intervalId);
+    if (time > 0) return;
+
+    if (intervalId.current) {
+      clearInterval(intervalId.current);
     }
-  }, [time, intervalId]);
+  }, [time]);
 
   const [min, sec] = timerFormat(time);
 
