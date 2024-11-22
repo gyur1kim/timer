@@ -23,14 +23,13 @@ function SetInterval({ milliseconds }: TimerInterface) {
 
       addDelayToList(delay);
 
-      const elapsedTime = Math.max(MILLISECOND, delay - (delay % MILLISECOND));
-      startTimestamp.current = now;
+      const delayedSec = Math.max(1, Math.floor(delay / MILLISECOND));
+      setTime((prev) => prev - delayedSec * MILLISECOND);
 
-      setTime((prev) => prev - elapsedTime);
+      startTimestamp.current = now;
     };
 
-    const id = setInterval(handleTimer, MILLISECOND);
-    intervalId.current = id;
+    intervalId.current = setInterval(handleTimer, MILLISECOND);
 
     return () => {
       if (intervalId.current) clearInterval(intervalId.current);
