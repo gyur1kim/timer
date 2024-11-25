@@ -4,6 +4,7 @@ import DelayedTimer from "@timerComponents/DelayedTimer";
 import SetInterval from "@timerComponents/SetIntervalTimer";
 import SetTimeout from "@timerComponents/SetTimeoutTimer";
 import RequestAnimationFrameTimer from "@timerComponents/RequestAnimationFrameTimer";
+import WebWorkerTimer from "@timerComponents/WebWorkerTimer";
 
 import "App.css";
 
@@ -15,6 +16,7 @@ const timerList: Record<string, JSX.Element> = {
   requestAnimationFrame: (
     <RequestAnimationFrameTimer milliseconds={timerTime} />
   ),
+  webWorker: <WebWorkerTimer milliseconds={timerTime} />,
 };
 
 function App() {
@@ -39,6 +41,7 @@ function App() {
         <button data-action="requestAnimationFrame">
           requestAnimationFrame 타이머
         </button>
+        <button data-action="webWorker">webWorker 타이머</button>
       </div>
       <div className="wrapper">{timerList[action]}</div>
     </>
