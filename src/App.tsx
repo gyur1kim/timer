@@ -8,42 +8,72 @@ import WebWorkerTimer from "@timerComponents/WebWorkerTimer";
 
 import "App.css";
 
-const timerTime = 10_000;
-const timerList: Record<string, JSX.Element> = {
-  delay: <DelayedTimer milliseconds={timerTime} />,
-  setInterval: <SetInterval milliseconds={timerTime} />,
-  setTimeout: <SetTimeout milliseconds={timerTime} />,
-  requestAnimationFrame: (
-    <RequestAnimationFrameTimer milliseconds={timerTime} />
-  ),
-  webWorker: <WebWorkerTimer milliseconds={timerTime} />,
-};
+const TIMER_TIME = 10_000;
+const TIMER_CONFIGS = [
+  {
+    id: "delay",
+    label: "일반 타이머",
+    component: <DelayedTimer milliseconds={TIMER_TIME} />,
+  },
+  {
+    id: "setInterval",
+    label: "setInterval",
+    component: <SetInterval milliseconds={TIMER_TIME} />,
+  },
+  {
+    id: "setTimeout",
+    label: "setTimeout",
+    component: <SetTimeout milliseconds={TIMER_TIME} />,
+  },
+  {
+    id: "requestAnimationFrame",
+    label: "requestAnimationFrame",
+    component: <RequestAnimationFrameTimer milliseconds={TIMER_TIME} />,
+  },
+  {
+    id: "webWorker",
+    label: "webWorker",
+    component: <WebWorkerTimer milliseconds={TIMER_TIME} />,
+  },
+] as const;
 
 function App() {
-  const [action, setAction] = useState("delay");
+  const [selectedTab, setSelectedTab] = useState<
+    (typeof TIMER_CONFIGS)[number]["id"]
+  >(TIMER_CONFIGS[0]["id"]);
 
   const handleTab = (e: MouseEvent<HTMLDivElement>) => {
-    if (!(e.target instanceof HTMLButtonElement)) return;
+    const button = e.target as Element;
 
-    const action = e.target.dataset.action;
-    if (action) {
-      setAction(action);
+    // closest를 사용해 버튼이나 그 자식 요소를 클릭했을 때도 동작하도록 함
+    const targetButton = button.closest("[data-action]");
+    if (!targetButton) return;
+
+    const action = targetButton.getAttribute("data-action");
+    if (action && TIMER_CONFIGS.some((config) => config.id === action)) {
+      setSelectedTab(action as typeof selectedTab);
     }
   };
 
   return (
     <>
       <h2>타이머를 만드는 네 가지 방법</h2>
-      <div className="tap-wrapper" onClick={(e) => handleTab(e)}>
-        <button data-action="delay">delay되는 타이머</button>
-        <button data-action="setInterval">setInterval 타이머</button>
-        <button data-action="setTimeout">setTimeout 타이머</button>
-        <button data-action="requestAnimationFrame">
-          requestAnimationFrame 타이머
-        </button>
-        <button data-action="webWorker">webWorker 타이머</button>
+      <div className="tab-wrapper" onClick={handleTab} role="tablist">
+        {TIMER_CONFIGS.map(({ id, label }) => (
+          <button
+            key={id}
+            className={`tab-button ${selectedTab === id ? "selected" : ""}`}
+            data-action={id}
+            role="tab"
+            aria-selected={selectedTab === id}
+          >
+            {label}
+          </button>
+        ))}
       </div>
-      <div className="wrapper">{timerList[action]}</div>
+      <div className="wrapper">
+        {TIMER_CONFIGS.find((config) => config.id === selectedTab)?.component}
+      </div>
     </>
   );
 }
