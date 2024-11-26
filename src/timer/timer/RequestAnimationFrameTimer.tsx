@@ -29,7 +29,7 @@ function RequestAnimationFrameTimer({ milliseconds }: TimerInterface) {
 
     return () => {
       if (requestAnimationFrameId.current)
-        clearInterval(requestAnimationFrameId.current);
+        cancelAnimationFrame(requestAnimationFrameId.current);
     };
   }, []);
 
