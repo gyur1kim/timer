@@ -1,4 +1,3 @@
-import addDelayToList from "utils/addDelayToList";
 import { MILLISECOND } from "utils/const";
 
 let intervalId: ReturnType<typeof setInterval> | number;
@@ -14,15 +13,13 @@ const handleTimer = () => {
   const now = Date.now();
   const delay = now - startTimestamp;
 
-  // addDelayToList(delay);
-
   const delayedSec = Math.max(1, Math.floor(delay / MILLISECOND));
 
   console.log(delayedSec);
   startTimestamp = now;
   time -= delayedSec * MILLISECOND;
 
-  postMessage(time);
+  postMessage({ time, delay });
 };
 
 self.onmessage = function (e: MessageEvent) {

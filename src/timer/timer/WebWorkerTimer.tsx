@@ -1,12 +1,15 @@
 import { useEffect, useState } from "react";
+
 import TimerDelay from "timer/TimerDelay";
-import timerFormat from "utils/timerFormat";
 import TimerDisplay from "timer/TimerDisplay";
+
+import timerFormat from "utils/timerFormat";
+import addDelayToList from "utils/addDelayToList";
+
 import { TimerInterface } from "types/timer";
 
 function WebWorkerTimer({ milliseconds }: TimerInterface) {
   const [time, setTime] = useState<number>(milliseconds);
-  // console.log(import.meta);
 
   const timerWorker = new Worker("src/worker/timerWorker.ts", {
     type: "module",
@@ -21,7 +24,8 @@ function WebWorkerTimer({ milliseconds }: TimerInterface) {
   }, []);
 
   timerWorker.onmessage = function (e) {
-    setTime(e.data);
+    setTime(e.data.time);
+    addDelayToList(e.data.delay);
   };
   const [min, sec] = timerFormat(time);
 
