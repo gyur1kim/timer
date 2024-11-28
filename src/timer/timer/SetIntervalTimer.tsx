@@ -22,11 +22,14 @@ function SetInterval({ milliseconds }: TimerInterface) {
       const delay = now - startTimestamp.current;
 
       addDelayToList(delay);
-
-      const delayedSec = Math.max(1, Math.floor(delay / MILLISECOND));
-      setTime((prev) => prev - delayedSec * MILLISECOND);
-
       startTimestamp.current = now;
+
+      // 시차 보정
+      // const delayedSec = Math.max(1, Math.floor(delay / MILLISECOND));
+      // setTime((prev) => prev - delayedSec * MILLISECOND);
+
+      // 시차 보정X
+      setTime((prev) => prev - MILLISECOND);
     };
 
     intervalId.current = setInterval(handleTimer, MILLISECOND);

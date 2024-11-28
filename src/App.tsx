@@ -1,6 +1,5 @@
 import { useState, MouseEvent } from "react";
 
-import DelayedTimer from "@timerComponents/DelayedTimer";
 import SetInterval from "@timerComponents/SetIntervalTimer";
 import SetTimeout from "@timerComponents/SetTimeoutTimer";
 import RequestAnimationFrameTimer from "@timerComponents/RequestAnimationFrameTimer";
@@ -10,11 +9,6 @@ import "App.css";
 
 const TIMER_TIME = 10_000;
 const TIMER_CONFIGS = [
-  {
-    id: "delay",
-    label: "일반 타이머",
-    component: <DelayedTimer milliseconds={TIMER_TIME} />,
-  },
   {
     id: "setInterval",
     label: "setInterval",

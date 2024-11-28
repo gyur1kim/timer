@@ -26,7 +26,7 @@ self.onmessage = function (e: MessageEvent) {
   console.log(e);
   if (e.data.state === "start") {
     time = e.data.time;
-    intervalId = setInterval(handleTimer, MILLISECOND, time);
+    intervalId = setInterval(handleTimer, MILLISECOND);
   }
 
   if (e.data.state === "stop") {

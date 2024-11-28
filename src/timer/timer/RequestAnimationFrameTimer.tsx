@@ -1,10 +1,12 @@
 import { useEffect, useRef, useState } from "react";
+
 import TimerDelay from "timer/TimerDelay";
 import TimerDisplay from "timer/TimerDisplay";
-import { TimerInterface } from "types/timer";
-import addDelayToList from "utils/addDelayToList";
 
+import addDelayToList from "utils/addDelayToList";
 import timerFormat from "utils/timerFormat";
+
+import { TimerInterface } from "types/timer";
 
 function RequestAnimationFrameTimer({ milliseconds }: TimerInterface) {
   const [time, setTime] = useState<number>(milliseconds);
@@ -17,10 +19,9 @@ function RequestAnimationFrameTimer({ milliseconds }: TimerInterface) {
       const now = Date.now();
       const delay = now - startTimestamp.current;
 
-      addDelayToList(delay);
-
       setTime((prev) => prev - delay);
 
+      addDelayToList(delay);
       startTimestamp.current = now;
       requestAnimationFrameId.current = requestAnimationFrame(handleTimer);
     };
