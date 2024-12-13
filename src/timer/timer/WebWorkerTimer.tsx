@@ -11,22 +11,23 @@ import { TimerInterface } from "types/timer";
 function WebWorkerTimer({ milliseconds }: TimerInterface) {
   const [time, setTime] = useState<number>(milliseconds);
 
-  const timerWorker = new Worker("src/worker/timerWorker.ts", {
-    type: "module",
-  });
-
   useEffect(() => {
+    const timerWorker = new Worker("src/worker/timerWorker.ts", {
+      type: "module",
+    });
+
     timerWorker.postMessage({ state: "start", time: milliseconds });
+    timerWorker.onmessage = function (e) {
+      setTime(e.data.time);
+      addDelayToList(e.data.delay);
+    };
 
     return () => {
       timerWorker.postMessage({ state: "stop" });
+      timerWorker.terminate();
     };
-  }, []);
+  }, [milliseconds]);
 
-  timerWorker.onmessage = function (e) {
-    setTime(e.data.time);
-    addDelayToList(e.data.delay);
-  };
   const [min, sec] = timerFormat(time);
 
   return (

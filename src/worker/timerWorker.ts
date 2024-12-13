@@ -1,7 +1,7 @@
 import { MILLISECOND } from "utils/const";
 
 let intervalId: ReturnType<typeof setInterval> | number;
-let startTimestamp = Date.now();
+let startTimestamp: number;
 let time: number;
 
 const handleTimer = () => {
@@ -15,7 +15,6 @@ const handleTimer = () => {
 
   const delayedSec = Math.max(1, Math.floor(delay / MILLISECOND));
 
-  console.log(delayedSec);
   startTimestamp = now;
   time -= delayedSec * MILLISECOND;
 
@@ -23,9 +22,9 @@ const handleTimer = () => {
 };
 
 self.onmessage = function (e: MessageEvent) {
-  console.log(e);
   if (e.data.state === "start") {
     time = e.data.time;
+    startTimestamp = Date.now();
     intervalId = setInterval(handleTimer, MILLISECOND);
   }
 
