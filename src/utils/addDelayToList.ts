@@ -5,6 +5,7 @@ function addDelayToList(delay: number) {
   if (ulElement.children.length > 50) {
     ulElement.removeChild(ulElement.firstChild!);
   }
+
   li.innerText = `[delay] ${delay}`;
   ulElement.appendChild(li);
   ulElement.scrollTop = ulElement.scrollHeight;
